@@ -1,0 +1,113 @@
+.signin-container {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.signin-video {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  opacity: 0.7; /* Increased visibility */
+  filter: brightness(0.6);
+}
+
+.signin-content {
+  background: rgba(15, 20, 30, 0.7); /* More transparent */
+  padding: 3rem 4rem;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 450px;
+  text-align: center;
+  backdrop-filter: blur(3px); /* Reduced blur */
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* Gradient text for header */
+.signin-content h1 {
+  background: linear-gradient(90deg, #00d4ff 0%, #6e48aa 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+
+/* Subtle subtitle */
+.signin-subtitle {
+  color: green;
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  font-weight: 300;
+}
+
+/* Form elements */
+.form-group {
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+
+.form-input {
+  width: 100%;
+  padding: 14px 18px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: white;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #00d4ff;
+  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.2);
+}
+
+/* Links below form */
+.signin-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-top: 1.5rem;
+}
+
+.signin-links a {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+.signin-links a:hover {
+  color: #00d4ff;
+  text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .signin-content {
+    padding: 2rem 1.5rem;
+    margin: 1rem;
+    width: 90%;
+  }
+  
+  .signin-content h1 {
+    font-size: 1.8rem;
+  }
+  
+  .signin-video {
+    opacity: 0.8; /* More visible on mobile */
+  }
+}

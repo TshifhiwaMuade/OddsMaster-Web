@@ -2,13 +2,14 @@ import React from 'react';
 import '../App.css';
 import { Button } from './Button';
 import './HeroSection.css';
+import video from '../media/2249402-uhd_3840_2160_24fps.mp4'; // Ensure this video fits your platform's theme
 
 function HeroSection() {
   return (
     <div className='hero-container'>
-      <video src='/videos/video-1.mp4' autoPlay loop muted />
-      <h1>ADVENTURE AWAITS</h1>
-      <p>What are you waiting for?</p>
+      <video src={video} autoPlay loop muted />
+      <h1>SMART BETTING. POWERED BY AI.</h1>
+      <p>Harness predictive analytics to make data-driven decisions.</p>
       <div className='hero-btns'>
         <Button
           className='btns'
@@ -17,13 +18,14 @@ function HeroSection() {
         >
           GET STARTED
         </Button>
+        {/* Removed "Watch Trailer" button and replaced with a demo button (optional) */}
         <Button
           className='btns'
           buttonStyle='btn--primary'
           buttonSize='btn--large'
-          onClick={console.log('hey')}
+          onClick={() => console.log('Redirect to demo')} // Replace with actual demo link
         >
-          WATCH TRAILER <i className='far fa-play-circle' />
+          LIVE DEMO <i className='fas fa-chart-line' /> {/* Changed icon to fit analytics theme */}
         </Button>
       </div>
     </div>
