@@ -4,69 +4,99 @@ video {
   height: 100%;
   position: fixed;
   z-index: -1;
+  filter: brightness(0.6); /* Darken video for better text contrast */
 }
 
 .hero-container {
-  /* background: url('/images/img-home.jpg') center center/cover no-repeat; */
   height: 100vh;
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 0 0 1000px rgba(10, 5, 30, 0.6); /* Deep blue-purple overlay */
   object-fit: contain;
+  text-align: center;
+  padding: 0 20px;
 }
 
 .hero-container > h1 {
   color: #fff;
-  font-size: 100px;
-  margin-top: -100px;
+  font-size: 4.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  letter-spacing: 1px;
+  background: linear-gradient(90deg, #00d4ff 0%, #6e48aa 100%); /* Data-inspired gradient */
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .hero-container > p {
-  margin-top: 8px;
-  color: #fff;
-  font-size: 32px;
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande',
-    'Lucida Sans', Arial, sans-serif;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.8rem;
+  font-family: 'Inter', 'Segoe UI', sans-serif; /* Modern font stack */
+  font-weight: 300;
+  max-width: 800px;
+  line-height: 1.4;
+  margin-bottom: 2rem;
 }
 
 .hero-btns {
-  margin-top: 32px;
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem; /* Replace margin with gap for better spacing */
 }
 
-.hero-btns .btn {
-  margin: 6px;
+/* Updated button styles to match theme */
+.hero-btns .btn--outline {
+  border: 2px solid #6e48aa; /* Purple accent */
+  color: #6e48aa;
 }
 
-.fa-play-circle {
-  margin-left: 4px;
+.hero-btns .btn--primary {
+  background-color: #00c853; /* Winning green */
+  border: none;
 }
 
+.hero-btns .btn--primary:hover {
+  background-color: #00e676;
+  transform: translateY(-2px);
+}
+
+.fa-chart-line {
+  margin-left: 8px;
+  transition: transform 0.3s ease;
+}
+
+.btn:hover .fa-chart-line {
+  transform: translateX(3px);
+}
+
+/* Modern responsive adjustments */
 @media screen and (max-width: 960px) {
   .hero-container > h1 {
-    font-size: 70px;
-    margin-top: -150px;
+    font-size: 3.5rem;
+  }
+  
+  .hero-container > p {
+    font-size: 1.5rem;
   }
 }
 
 @media screen and (max-width: 768px) {
   .hero-container > h1 {
-    font-size: 50px;
-    margin-top: -100px;
+    font-size: 2.5rem;
   }
 
   .hero-container > p {
-    font-size: 30px;
+    font-size: 1.2rem;
   }
 
-  .btn-mobile {
-    display: block;
-    text-decoration: none;
-  }
-
-  .btn {
+  .hero-btns {
+    flex-direction: column;
     width: 100%;
+    max-width: 300px;
   }
 }
