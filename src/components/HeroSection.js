@@ -18,15 +18,8 @@ function HeroSection() {
         >
           GET STARTED
         </Button>
-        {/* Removed "Watch Trailer" button and replaced with a demo button (optional) */}
-        <Button
-          className='btns'
-          buttonStyle='btn--primary'
-          buttonSize='btn--large'
-          onClick={() => console.log('Redirect to demo')} // Replace with actual demo link
-        >
-          LIVE DEMO <i className='fas fa-chart-line' /> {/* Changed icon to fit analytics theme */}
-        </Button>
+       
+       
       </div>
     </div>
   );

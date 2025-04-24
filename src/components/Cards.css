@@ -5,6 +5,8 @@
 
 h1 {
   text-align: center;
+  color: #2d3436;
+  margin-bottom: 2rem;
 }
 
 .cards__container {
@@ -19,29 +21,56 @@ h1 {
 .cards__wrapper {
   position: relative;
   margin: 50px 0 45px;
+  width: 100%;
 }
 
 .cards__items {
-  margin-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  gap: 2rem;
+  margin-bottom: 0;
 }
 
 .cards__item {
   display: flex;
   flex: 1;
-  margin: 0 1rem;
+  min-width: 300px;
+  margin: 0;
   border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.cards__item:hover {
+  transform: translateY(-10px);
+}
+
+/* Bronze Card */
+.cards__item:nth-child(1) .cards__item__link {
+  box-shadow: 0 6px 20px rgba(205, 127, 50, 0.2);
+  border-top: 5px solid #cd7f32; /* Bronze color */
+}
+
+/* Silver Card */
+.cards__item:nth-child(2) .cards__item__link {
+  box-shadow: 0 6px 20px rgba(192, 192, 192, 0.2);
+  border-top: 5px solid #c0c0c0; /* Silver color */
+}
+
+/* Gold Card */
+.cards__item:nth-child(3) .cards__item__link {
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.2);
+  border-top: 5px solid #d4af37; /* Gold color */
 }
 
 .cards__item__link {
   display: flex;
   flex-flow: column;
   width: 100%;
-  box-shadow: 0 6px 20px rgba(56, 125, 255, 0.17);
-  -webkit-filter: drop-shadow(0 6px 20px rgba(56, 125, 255, 0.017));
-  filter: drop-shadow(0 6px 20px rgba(56, 125, 255, 0.017));
   border-radius: 10px;
   overflow: hidden;
   text-decoration: none;
+  background: white;
 }
 
 .cards__item__pic-wrap {
@@ -49,25 +78,36 @@ h1 {
   width: 100%;
   padding-top: 67%;
   overflow: hidden;
-}
-
-.fade-img {
-  animation-name: fade-img;
-  animation-duration: 2s;
+  background: linear-gradient(to right, #f5f5f5, #e0e0e0);
 }
 
 .cards__item__pic-wrap::after {
   content: attr(data-category);
   position: absolute;
   bottom: 0;
-  margin-left: 10px;
-  padding: 6px 8px;
-  max-width: calc((100%) - 60px);
-  font-size: 12px;
+  left: 0;
+  right: 0;
+  padding: 12px 0;
+  font-size: 16px;
   font-weight: 700;
-  color: #fff;
-  background-color: #1f98f4;
-  box-sizing: border-box;
+  color: white;
+  text-align: center;
+  background-color: rgba(0,0,0,0.7);
+}
+
+/* Bronze label */
+.cards__item:nth-child(1) .cards__item__pic-wrap::after {
+  background-color: #cd7f32;
+}
+
+/* Silver label */
+.cards__item:nth-child(2) .cards__item__pic-wrap::after {
+  background-color: #c0c0c0;
+}
+
+/* Gold label */
+.cards__item:nth-child(3) .cards__item__pic-wrap::after {
+  background-color: #d4af37;
 }
 
 .cards__item__img {
@@ -90,29 +130,56 @@ h1 {
 }
 
 .cards__item__info {
-  padding: 20px 30px 30px;
+  padding: 25px;
+  text-align: center;
 }
 
 .cards__item__text {
   color: #252e48;
-  font-size: 18px;
-  line-height: 24px;
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 15px;
 }
 
-@media only screen and (min-width: 1200px) {
-  .content__blog__container {
-    width: 84%;
-  }
+.price {
+  font-size: 28px;
+  font-weight: bold;
+  margin: 15px 0;
 }
 
-@media only screen and (min-width: 1024px) {
-  .cards__items {
-    display: flex;
-  }
+/* Bronze price */
+.cards__item:nth-child(1) .price {
+  color: #cd7f32;
+}
+
+/* Silver price */
+.cards__item:nth-child(2) .price {
+  color: #c0c0c0;
+}
+
+/* Gold price */
+.cards__item:nth-child(3) .price {
+  color: #d4af37;
 }
 
 @media only screen and (max-width: 1024px) {
+  .cards__items {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
   .cards__item {
+    min-width: 250px;
     margin-bottom: 2rem;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .cards {
+    padding: 2rem;
+  }
+  
+  .cards__item {
+    min-width: 100%;
   }
 }
