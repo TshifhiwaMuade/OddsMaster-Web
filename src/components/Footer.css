@@ -177,3 +177,24 @@
     width: 100%;
   }
 }
+/* Add to Footer.css */
+.social-logo {
+  color: #6e48aa; /* Your brand purple */
+}
+
+.footer-subscription-heading {
+  background: linear-gradient(90deg, #00d4ff 0%, #6e48aa 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.btn--outline {
+  border-color: #6e48aa;
+  color: #6e48aa;
+}
+
+.btn--outline:hover {
+  background: #6e48aa;
+  color: white;
+}
