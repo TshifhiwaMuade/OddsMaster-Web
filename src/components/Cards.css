@@ -1,185 +1,115 @@
-.cards {
-  padding: 4rem;
-  background: #fff;
-}
-
-h1 {
+.services-container {
+  padding: 4rem 2rem;
+  background: linear-gradient(135deg, #0a051e 0%, #1a1a2e 100%);
+  color: white;
   text-align: center;
-  color: #2d3436;
-  margin-bottom: 2rem;
 }
 
-.cards__container {
-  display: flex;
-  flex-flow: column;
-  align-items: center;
-  max-width: 1120px;
-  width: 90%;
+.services-heading {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  background: linear-gradient(90deg, #00d4ff 0%, #6e48aa 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.services-subtitle {
+  font-size: 1.2rem;
+  margin-bottom: 3rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.services-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
-.cards__wrapper {
-  position: relative;
-  margin: 50px 0 45px;
-  width: 100%;
-}
-
-.cards__items {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: nowrap;
-  gap: 2rem;
-  margin-bottom: 0;
-}
-
-.cards__item {
-  display: flex;
-  flex: 1;
-  min-width: 300px;
-  margin: 0;
-  border-radius: 10px;
+.service-card {
+  background: rgba(15, 20, 30, 0.85);
+  border-radius: 12px;
+  padding: 2rem;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   transition: all 0.3s ease;
 }
 
-.cards__item:hover {
+.service-card:hover {
   transform: translateY(-10px);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25);
 }
 
-/* Bronze Card */
-.cards__item:nth-child(1) .cards__item__link {
-  box-shadow: 0 6px 20px rgba(205, 127, 50, 0.2);
-  border-top: 5px solid #cd7f32; /* Bronze color */
-}
-
-/* Silver Card */
-.cards__item:nth-child(2) .cards__item__link {
-  box-shadow: 0 6px 20px rgba(192, 192, 192, 0.2);
-  border-top: 5px solid #c0c0c0; /* Silver color */
-}
-
-/* Gold Card */
-.cards__item:nth-child(3) .cards__item__link {
-  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.2);
-  border-top: 5px solid #d4af37; /* Gold color */
-}
-
-.cards__item__link {
-  display: flex;
-  flex-flow: column;
-  width: 100%;
-  border-radius: 10px;
-  overflow: hidden;
-  text-decoration: none;
-  background: white;
-}
-
-.cards__item__pic-wrap {
+.service-card-header {
+  margin-bottom: 2rem;
   position: relative;
-  width: 100%;
-  padding-top: 67%;
-  overflow: hidden;
-  background: linear-gradient(to right, #f5f5f5, #e0e0e0);
 }
 
-.cards__item__pic-wrap::after {
-  content: attr(data-category);
+.service-card-header h3 {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+}
+
+.service-icon {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+  color: #00d4ff;
+}
+
+.service-features {
+  list-style: none;
+  padding: 0;
+  margin: 2rem 0;
+  text-align: left;
+}
+
+.service-features li {
+  padding: 0.8rem 0;
+  position: relative;
+  padding-left: 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.service-features li:before {
+  content: '✓';
   position: absolute;
-  bottom: 0;
   left: 0;
-  right: 0;
-  padding: 12px 0;
-  font-size: 16px;
-  font-weight: 700;
-  color: white;
-  text-align: center;
-  background-color: rgba(0,0,0,0.7);
-}
-
-/* Bronze label */
-.cards__item:nth-child(1) .cards__item__pic-wrap::after {
-  background-color: #cd7f32;
-}
-
-/* Silver label */
-.cards__item:nth-child(2) .cards__item__pic-wrap::after {
-  background-color: #c0c0c0;
-}
-
-/* Gold label */
-.cards__item:nth-child(3) .cards__item__pic-wrap::after {
-  background-color: #d4af37;
-}
-
-.cards__item__img {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  display: block;
-  width: 100%;
-  max-width: 100%;
-  height: 100%;
-  max-height: 100%;
-  object-fit: cover;
-  transition: all 0.2s linear;
-}
-
-.cards__item__img:hover {
-  transform: scale(1.1);
-}
-
-.cards__item__info {
-  padding: 25px;
-  text-align: center;
-}
-
-.cards__item__text {
-  color: #252e48;
-  font-size: 16px;
-  line-height: 1.6;
-  margin-bottom: 15px;
-}
-
-.price {
-  font-size: 28px;
+  color: #00d4ff;
   font-weight: bold;
-  margin: 15px 0;
 }
 
-/* Bronze price */
-.cards__item:nth-child(1) .price {
-  color: #cd7f32;
+.service-button {
+  display: inline-block;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  width: 100%;
+  text-align: center;
+  background: linear-gradient(90deg, #00d4ff 0%, #6e48aa 100%);
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin-top: 1rem;
 }
 
-/* Silver price */
-.cards__item:nth-child(2) .price {
-  color: #c0c0c0;
+.service-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 7px 14px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(90deg, #6e48aa 0%, #00d4ff 100%);
 }
 
-/* Gold price */
-.cards__item:nth-child(3) .price {
-  color: #d4af37;
-}
-
-@media only screen and (max-width: 1024px) {
-  .cards__items {
-    flex-wrap: wrap;
-    justify-content: center;
+@media (max-width: 768px) {
+  .services-cards {
+    grid-template-columns: 1fr;
   }
   
-  .cards__item {
-    min-width: 250px;
-    margin-bottom: 2rem;
-  }
-}
-
-@media only screen and (max-width: 768px) {
-  .cards {
-    padding: 2rem;
-  }
-  
-  .cards__item {
-    min-width: 100%;
+  .service-card {
+    max-width: 400px;
+    margin: 0 auto;
   }
 }

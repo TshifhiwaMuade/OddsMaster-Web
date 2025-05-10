@@ -1,17 +1,17 @@
 import * as React from 'react';
 import { Button } from './Button';
 import { Link } from 'react-router-dom';
-import './Footer.css'; // Ensure this CSS file is imported
+import './Footer.css';
 
 function Footer() {
   return (
     <div className='footer-container'>
       <section className='footer-subscription'>
         <p className='footer-subscription-heading'>
-          Join the Adventure newsletter to receive our best vacation deals
+          Get exclusive betting insights delivered weekly
         </p>
         <p className='footer-subscription-text'>
-          You can unsubscribe at any time.
+          Receive our top AI-powered picks and market analysis
         </p>
         <div className='input-areas'>
           <form>
@@ -28,35 +28,34 @@ function Footer() {
       <div className='footer-links'>
         <div className='footer-link-wrapper'>
           <div className='footer-link-items'>
-            <h2>About Us</h2>
-            <Link to='/sign-up'>How it works</Link>
-            <Link to='/'>Testimonials</Link>
-            <Link to='/'>Careers</Link>
-            <Link to='/'>Investors</Link>
-            <Link to='/'>Terms of Service</Link>
+            <h2>Our Edge</h2>
+            <Link to='/how-it-works'>AI Methodology</Link>
+            <Link to='/data-sources'>Data Sources</Link>
+            <Link to='/performance'>Track Record</Link>
+            <Link to='/value-betting'>Value Betting</Link>
           </div>
           <div className='footer-link-items'>
-            <h2>Contact Us</h2>
-            <Link to='/'>Contact</Link>
-            <Link to='/'>Support</Link>
-            <Link to='/'>Destinations</Link>
-            <Link to='/'>Sponsorships</Link>
+            <h2>Markets</h2>
+            <Link to='/soccer'>Soccer</Link>
+            <Link to='/rugby'>Rugby</Link>
+            <Link to='/cricket'>Cricket</Link>
+            <Link to='/tennis'>Tennis</Link>
           </div>
         </div>
         <div className='footer-link-wrapper'>
           <div className='footer-link-items'>
-            <h2>Videos</h2>
-            <Link to='/'>Submit Video</Link>
-            <Link to='/'>Ambassadors</Link>
-            <Link to='/'>Agency</Link>
-            <Link to='/'>Influencer</Link>
+            <h2>Legal</h2>
+            <Link to='/terms'>Terms of Service</Link>
+            <Link to='/privacy'>Privacy Policy</Link>
+            <Link to='/responsible'>Responsible Gambling</Link>
+            <Link to='/faq'>FAQ</Link>
           </div>
           <div className='footer-link-items'>
-            <h2>Social Media</h2>
-            <Link to='/'>Instagram</Link>
-            <Link to='/'>Facebook</Link>
-            <Link to='/'>Youtube</Link>
-            <Link to='/'>Twitter</Link>
+            <h2>Company</h2>
+            <Link to='/about'>About Us</Link>
+            <Link to='/contact'>Contact</Link>
+            <Link to='/careers'>Careers</Link>
+            <Link to='/partners'>Partners</Link>
           </div>
         </div>
       </div>
@@ -64,36 +63,12 @@ function Footer() {
         <div className='social-media-wrap'>
           <div className='footer-logo'>
             <Link to='/' className='social-logo'>
-              TRVL
-              <i className='fab fa-typo3' />
+              ODDSMASTER RSA
+              <i className='fas fa-chart-line' />
             </Link>
           </div>
-          <small className='website-rights'>TRVL © 2020</small>
+          <small className='website-rights'>Oddsmaster RSA © {new Date().getFullYear()}</small>
           <div className='social-icons'>
-            <Link
-              className='social-icon-link facebook'
-              to='/'
-              target='_blank'
-              aria-label='Facebook'
-            >
-              <i className='fab fa-facebook-f' />
-            </Link>
-            <Link
-              className='social-icon-link instagram'
-              to='/'
-              target='_blank'
-              aria-label='Instagram'
-            >
-              <i className='fab fa-instagram' />
-            </Link>
-            <Link
-              className='social-icon-link youtube'
-              to='/'
-              target='_blank'
-              aria-label='Youtube'
-            >
-              <i className='fab fa-youtube' />
-            </Link>
             <Link
               className='social-icon-link twitter'
               to='/'
@@ -103,12 +78,28 @@ function Footer() {
               <i className='fab fa-twitter' />
             </Link>
             <Link
-              className='social-icon-link linkedin'
+              className='social-icon-link telegram'
               to='/'
               target='_blank'
-              aria-label='LinkedIn'
+              aria-label='Telegram'
             >
-              <i className='fab fa-linkedin' />
+              <i className='fab fa-telegram' />
+            </Link>
+            <Link
+              className='social-icon-link discord'
+              to='/'
+              target='_blank'
+              aria-label='Discord'
+            >
+              <i className='fab fa-discord' />
+            </Link>
+            <Link
+              className='social-icon-link youtube'
+              to='/'
+              target='_blank'
+              aria-label='YouTube'
+            >
+              <i className='fab fa-youtube' />
             </Link>
           </div>
         </div>
