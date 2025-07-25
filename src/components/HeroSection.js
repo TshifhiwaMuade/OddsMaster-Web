@@ -35,13 +35,7 @@ function HeroSection() {
           >
             EXPLORE FEATURES <i className='fas fa-arrow-right' />
           </Button>
-          {/* <Button
-            className='btns'
-            buttonStyle='btn--primary'
-            buttonSize='btn--large'
-          >
-            HOW IT WORKS <i className='fas fa-play' />
-          </Button> */}
+          
         </div>
 
         <div className='trust-badges'>

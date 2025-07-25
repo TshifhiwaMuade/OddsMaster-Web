@@ -111,3 +111,17 @@
     opacity: 0.8; /* More visible on mobile */
   }
 }
+.signin-error {
+  color: #ff3333;
+  background-color: #ffeeee;
+  padding: 10px 15px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  border: 1px solid #ffcccc;
+  text-align: center;
+}
+
+button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}

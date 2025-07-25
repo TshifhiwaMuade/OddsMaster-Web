@@ -1,8 +1,15 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import '../../App.css';
-import './AboutUs.css'; // Create this CSS file for additional styling
+import './AboutUs.css';
 
 export default function AboutUs() {
+  const history = useHistory();
+
+  const handleStartTrial = () => {
+    history.push('/sign-up');
+  };
+
   return (
     <div className='about-us'>
       <section className='hero-section'>
@@ -87,7 +94,9 @@ export default function AboutUs() {
           approach sports wagering. The numbers don't lie - it's time to let them guide your 
           betting strategy.
         </p>
-        <button className='cta-button'>Start Your Free Trial</button>
+        <button className='cta-button' onClick={handleStartTrial}>
+          Start Your Free Trial
+        </button>
       </section>
     </div>
   );

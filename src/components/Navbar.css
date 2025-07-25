@@ -1,4 +1,4 @@
-/* Navbar.css - Cleaned Version */
+/* Navbar.css - Updated Version */
 .navbar {
   background: rgba(15, 20, 30, 0.95);
   backdrop-filter: blur(8px);
@@ -15,7 +15,7 @@
 
 .navbar-container {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   height: 80px;
   width: 100%;
@@ -32,6 +32,7 @@
   align-items: center;
   font-weight: 800;
   letter-spacing: 1px;
+  margin-right: auto;
 }
 
 .navbar-logo i {
@@ -44,7 +45,8 @@
   display: flex;
   align-items: center;
   list-style: none;
-  margin-right: 20px;
+  margin: 0;
+  padding: 0;
 }
 
 .nav-item {
@@ -78,6 +80,12 @@
   background: linear-gradient(90deg, #00d4ff 0%, #6e48aa 100%);
 }
 
+.auth-buttons {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
 .btn--outline {
   border: 2px solid #00d4ff;
   color: #00d4ff;
@@ -87,6 +95,8 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  text-decoration: none;
+  display: inline-block;
 }
 
 .btn--outline:hover {
@@ -96,6 +106,25 @@
   box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
 }
 
+.btn--primary {
+  background: linear-gradient(90deg, #00d4ff 0%, #6e48aa 100%);
+  color: white;
+  padding: 8px 20px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  display: inline-block;
+  border: none;
+}
+
+.btn--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(110, 72, 170, 0.4);
+}
+
 .menu-icon {
   display: none;
   color: #fff;
@@ -103,8 +132,20 @@
   cursor: pointer;
 }
 
+.mobile-auth {
+  display: none;
+}
+
 /* Mobile Styles */
 @media screen and (max-width: 960px) {
+  .navbar-container {
+    justify-content: space-between;
+  }
+
+  .navbar-logo {
+    margin-right: 0;
+  }
+
   .nav-menu {
     display: flex;
     flex-direction: column;
@@ -117,7 +158,6 @@
     transition: all 0.5s ease;
     background: rgba(15, 20, 30, 0.98);
     padding: 2rem 0;
-    margin-right: 0;
   }
 
   .nav-menu.active {
@@ -145,6 +185,12 @@
     display: none;
   }
 
+  .auth-buttons {
+    flex-direction: column;
+    gap: 10px;
+    padding: 1rem;
+  }
+
   .menu-icon {
     display: block;
     position: absolute;
@@ -153,16 +199,13 @@
     transform: translateY(-50%);
   }
 
-  .btn--outline {
-    display: none;
+  .mobile-auth {
+    display: block;
+    margin-left: auto;
   }
 
-  /* Show the FREE TRIAL as a full-width button in mobile */
-  .nav-menu.active .btn--outline {
-    display: block;
-    width: 80%;
-    margin: 1rem auto 0;
-    padding: 12px 0;
-    text-align: center;
+  .mobile-auth .btn--outline {
+    padding: 8px 15px;
+    font-size: 0.9rem;
   }
 }

@@ -140,10 +140,6 @@ export default function SignUp() {
           <span>OR</span>
         </div>
         
-        <button type="button" className="demo-btn">
-          LIVE DEMO <i className="fas fa-arrow-right"></i>
-        </button>
-        
         <p className="login-link">
           Already a member? <Link to="/sign-in">Sign In</Link>
         </p>

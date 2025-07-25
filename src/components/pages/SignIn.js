@@ -1,19 +1,37 @@
 import React, { useState } from 'react';
-import './SignIn.css';
+import { useAuth } from '../../contexts/AuthContext';
+import { useHistory, Link } from 'react-router-dom';
 import { Button } from '../Button';
 import video from '../../media/2249402-uhd_3840_2160_24fps.mp4';
-import { Link } from 'react-router-dom';
+import './SignIn.css';
 
 function SignIn() {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const { login } = useAuth();
+  const history = useHistory();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Your sign-in logic here
-    console.log('Form submitted:', formData);
+    setError('');
+    setIsLoading(true);
+
+    try {
+      const success = await login(formData);
+      if (success) {
+        history.push('/dashboard');
+      } else {
+        setError('Failed to sign in. Please check your credentials.');
+      }
+    } catch (err) {
+      setError(err.message || 'An error occurred during sign in.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleChange = (e) => {
@@ -37,8 +55,11 @@ function SignIn() {
       </video>
       
       <div className='signin-content'>
-      <h1>WELCOME BACK</h1>
-      <p className="signin-subtitle">Sign in to access your predictions</p>
+        <h1>WELCOME BACK</h1>
+        <p className="signin-subtitle">Sign in to access your predictions</p>
+        
+        {error && <div className="signin-error">{error}</div>}
+        
         <form className='signin-form' onSubmit={handleSubmit}>
           <div className='form-group'>
             <label htmlFor="email">Email Address</label>
@@ -73,8 +94,9 @@ function SignIn() {
             buttonStyle='btn--primary'
             buttonSize='btn--large'
             type='submit'
+            disabled={isLoading}
           >
-            SIGN IN
+            {isLoading ? 'SIGNING IN...' : 'SIGN IN'}
           </Button>
           
           <div className='signin-links'>
