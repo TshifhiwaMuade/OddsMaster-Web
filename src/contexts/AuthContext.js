@@ -1,5 +1,5 @@
 // src/contexts/AuthContext.js
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 
 const AuthContext = createContext();
@@ -16,10 +16,20 @@ export const AuthProvider = ({ children }) => {
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          // Verify token with backend (optional)
-          // const response = await verifyToken(token);
-          setUser({ token });
-          setIsAuthenticated(true);
+          // Verify token with backend
+          const response = await fetch('/api/auth/verify', {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
+          
+          if (response.ok) {
+            const userData = await response.json();
+            setUser(userData);
+            setIsAuthenticated(true);
+          } else {
+            logout();
+          }
         } catch (error) {
           logout();
         }
@@ -29,42 +39,50 @@ export const AuthProvider = ({ children }) => {
     checkAuth();
   }, []);
 
-  const login = async (credentials) => {
+  const login = async (email, password) => {
+    setIsLoading(true);
     try {
-      // Replace with your actual API call
       const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(credentials)
+        body: JSON.stringify({ email, password })
       });
       
       const data = await response.json();
       
-      if (response.ok) {
-        localStorage.setItem('token', data.token);
-        setUser(data.user);
-        setIsAuthenticated(true);
-        history.push('/dashboard');
-        return true;
-      } else {
+      if (!response.ok) {
         throw new Error(data.message || 'Login failed');
       }
+
+      localStorage.setItem('token', data.token);
+      setUser(data.user);
+      setIsAuthenticated(true);
+      history.push('/dashboard');
+      return true;
     } catch (error) {
       console.error('Login error:', error);
-      return false;
+      throw error; // Throw error to be caught by the SignIn component
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const logout = () => {
+  const logout = useCallback(() => {
     localStorage.removeItem('token');
     setUser(null);
     setIsAuthenticated(false);
     history.push('/sign-in');
-  };
+  }, [history]);
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, isLoading, login, logout }}>
-      {!isLoading && children}
+    <AuthContext.Provider value={{ 
+      user, 
+      isAuthenticated, 
+      isLoading, 
+      login, 
+      logout 
+    }}>
+      {children}
     </AuthContext.Provider>
   );
 };

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import { useHistory, Link } from 'react-router-dom';
-import { Button } from '../Button';
+import { useHistory, useLocation, Link } from 'react-router-dom';
 import video from '../../media/2249402-uhd_3840_2160_24fps.mp4';
 import './SignIn.css';
 
@@ -12,23 +11,34 @@ function SignIn() {
   });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, isLoading: authLoading } = useAuth();
   const history = useHistory();
+  const location = useLocation();
+
+  // Get redirect location from PrivateRoute or default to dashboard
+  const { from } = location.state || { from: { pathname: '/dashboard' } };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Validate form
+    if (!formData.email || !formData.password) {
+      setError('Please fill in all fields');
+      return;
+    }
+
     setError('');
     setIsLoading(true);
 
     try {
-      const success = await login(formData);
-      if (success) {
-        history.push('/dashboard');
-      } else {
-        setError('Failed to sign in. Please check your credentials.');
-      }
+      await login(formData.email, formData.password);
+      history.replace(from); // Redirect to intended page or dashboard
     } catch (err) {
-      setError(err.message || 'An error occurred during sign in.');
+      setError(
+        err.response?.data?.message || 
+        err.message || 
+        'Failed to sign in. Please check your credentials.'
+      );
     } finally {
       setIsLoading(false);
     }
@@ -58,6 +68,13 @@ function SignIn() {
         <h1>WELCOME BACK</h1>
         <p className="signin-subtitle">Sign in to access your predictions</p>
         
+        {/* Show redirect message if coming from PrivateRoute */}
+        {location.state?.message && (
+          <div className="signin-message">
+            {location.state.message}
+          </div>
+        )}
+        
         {error && <div className="signin-error">{error}</div>}
         
         <form className='signin-form' onSubmit={handleSubmit}>
@@ -72,6 +89,7 @@ function SignIn() {
               placeholder="Enter your email"
               className='form-input'
               required
+              disabled={isLoading || authLoading}
             />
           </div>
           
@@ -87,17 +105,24 @@ function SignIn() {
               className='form-input'
               required
               minLength="6"
+              disabled={isLoading || authLoading}
             />
           </div>
           
-          <Button
-            buttonStyle='btn--primary'
-            buttonSize='btn--large'
+          <button
             type='submit'
-            disabled={isLoading}
+            className={`signin-button ${isLoading || authLoading ? 'loading' : ''}`}
+            disabled={isLoading || authLoading}
           >
-            {isLoading ? 'SIGNING IN...' : 'SIGN IN'}
-          </Button>
+            {isLoading || authLoading ? (
+              <>
+                <span className="spinner"></span>
+                SIGNING IN...
+              </>
+            ) : (
+              'SIGN IN'
+            )}
+          </button>
           
           <div className='signin-links'>
             <Link to='/forgot-password'>Forgot Password?</Link>

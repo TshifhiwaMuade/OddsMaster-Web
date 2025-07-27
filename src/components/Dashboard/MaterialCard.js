@@ -1,7 +1,8 @@
 import React from 'react';
 import MaterialTable from './MaterialTable';
 
-const MaterialCard = () => {
+// Named export (can import as { MaterialCard })
+export const MaterialCard = () => {
   const materialData = [
     { location: 'Mechanical City', date: '2023-06-15', size: 'None', total: 10, amount: 4 },
     { location: 'Longcoil', date: '2023-06-22', size: 'None', total: 10, amount: 4 },
@@ -36,4 +37,5 @@ const MaterialCard = () => {
   );
 };
 
+// Default export (can import as MaterialCard)
 export default MaterialCard;

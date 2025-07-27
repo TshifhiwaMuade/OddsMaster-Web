@@ -1,6 +1,7 @@
 import React from 'react';
-import { BettingCard, MaterialCard } from '../components/Dashboard';
-import '../components/Dashboard/Dashboard.css';
+import { BettingCard } from '../Dashboard/BettingCard';
+import { MaterialCard } from '../Dashboard/MaterialCard';
+import '../Dashboard/Dashboard.css';
 
 const DashboardPage = () => {
   return (

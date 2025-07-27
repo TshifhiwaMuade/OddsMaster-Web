@@ -2,7 +2,8 @@ import React from 'react';
 import ProbabilityItem from './ProbabilityItem';
 import MatchResults from './MatchResults';
 
-const BettingCard = () => {
+// Named export (can import as { BettingCard })
+export const BettingCard = () => {
   const probabilityData = [
     { probability: '0.1%', description: 'A person may not work', value: 52 },
     { probability: '0.2%', description: 'A person may not work', value: 10 },
@@ -32,4 +33,5 @@ const BettingCard = () => {
   );
 };
 
+// Default export (can import as BettingCard)
 export default BettingCard;
