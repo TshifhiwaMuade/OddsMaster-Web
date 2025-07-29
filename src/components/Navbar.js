@@ -1,5 +1,6 @@
+// src/components/Navbar.js
 import React, { useState, useEffect } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // useHistory → useNavigate
 import { useAuth } from '../contexts/AuthContext';
 import './Navbar.css';
 import { Button } from './Button';
@@ -7,7 +8,7 @@ import { Button } from './Button';
 function Navbar() {
   const [click, setClick] = useState(false);
   const [button, setButton] = useState(true);
-  const history = useHistory();
+  const navigate = useNavigate(); // ← useNavigate instead of useHistory
   const { user, isAuthenticated, logout } = useAuth();
 
   const handleClick = () => setClick(!click);
@@ -30,7 +31,7 @@ function Navbar() {
   const handleLogout = () => {
     logout();
     closeMobileMenu();
-    history.push('/');
+    navigate('/'); // ← history.push('/') → navigate('/')
   };
 
   return (
@@ -90,7 +91,7 @@ function Navbar() {
                     buttonSize='btn--medium'
                     onClick={() => {
                       closeMobileMenu();
-                      history.push('/sign-in');
+                      navigate('/sign-in'); // ← updated
                     }}
                   >
                     Login
@@ -100,7 +101,7 @@ function Navbar() {
                     buttonSize='btn--medium'
                     onClick={() => {
                       closeMobileMenu();
-                      history.push('/sign-up');
+                      navigate('/sign-up'); // ← updated
                     }}
                   >
                     Sign Up
@@ -118,7 +119,7 @@ function Navbar() {
               buttonSize='btn--medium'
               onClick={() => {
                 closeMobileMenu();
-                history.push('/sign-in');
+                navigate('/sign-in'); // ← updated
               }}
             >
               Login

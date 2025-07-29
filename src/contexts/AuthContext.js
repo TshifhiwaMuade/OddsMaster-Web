@@ -1,6 +1,7 @@
 // src/contexts/AuthContext.js
 import React, { createContext, useState, useEffect, useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
+
+const API_URL = 'http://localhost:5000/api';
 
 const AuthContext = createContext();
 
@@ -8,7 +9,12 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const history = useHistory();
+
+  const logout = useCallback(() => {
+    localStorage.removeItem('token');
+    setUser(null);
+    setIsAuthenticated(false);
+  }, []);
 
   // Check for existing token on initial load
   useEffect(() => {
@@ -16,8 +22,7 @@ export const AuthProvider = ({ children }) => {
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          // Verify token with backend
-          const response = await fetch('/api/auth/verify', {
+          const response = await fetch(`${API_URL}/auth/verify`, {
             headers: {
               'Authorization': `Bearer ${token}`
             }
@@ -31,25 +36,26 @@ export const AuthProvider = ({ children }) => {
             logout();
           }
         } catch (error) {
+          console.error('Auth check failed:', error);
           logout();
         }
       }
       setIsLoading(false);
     };
     checkAuth();
-  }, []);
+  }, [logout]);
 
   const login = async (email, password) => {
     setIsLoading(true);
     try {
-      const response = await fetch('/api/auth/login', {
+      const response = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
       });
-      
+
       const data = await response.json();
-      
+
       if (!response.ok) {
         throw new Error(data.message || 'Login failed');
       }
@@ -57,31 +63,17 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('token', data.token);
       setUser(data.user);
       setIsAuthenticated(true);
-      history.push('/dashboard');
       return true;
     } catch (error) {
       console.error('Login error:', error);
-      throw error; // Throw error to be caught by the SignIn component
+      throw error;
     } finally {
       setIsLoading(false);
     }
   };
 
-  const logout = useCallback(() => {
-    localStorage.removeItem('token');
-    setUser(null);
-    setIsAuthenticated(false);
-    history.push('/sign-in');
-  }, [history]);
-
   return (
-    <AuthContext.Provider value={{ 
-      user, 
-      isAuthenticated, 
-      isLoading, 
-      login, 
-      logout 
-    }}>
+    <AuthContext.Provider value={{ user, isAuthenticated, isLoading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

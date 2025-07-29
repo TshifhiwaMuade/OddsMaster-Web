@@ -1,13 +1,14 @@
+// src/components/pages/AboutUs.js
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'; // ✅ Replace useHistory with useNavigate
 import '../../App.css';
 import './AboutUs.css';
 
 export default function AboutUs() {
-  const history = useHistory();
+  const navigate = useNavigate(); // ✅ useNavigate instead of useHistory
 
   const handleStartTrial = () => {
-    history.push('/sign-up');
+    navigate('/sign-up'); // ✅ history.push('/sign-up') → navigate('/sign-up')
   };
 
   return (

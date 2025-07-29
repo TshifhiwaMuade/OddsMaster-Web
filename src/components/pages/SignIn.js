@@ -1,6 +1,7 @@
+// src/components/pages/SignIn.js
 import React, { useState } from 'react';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { useHistory, useLocation, Link } from 'react-router-dom';
 import video from '../../media/2249402-uhd_3840_2160_24fps.mp4';
 import './SignIn.css';
 
@@ -11,17 +12,17 @@ function SignIn() {
   });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { login, isLoading: authLoading } = useAuth();
-  const history = useHistory();
+
+  const { login } = useAuth(); // Use login from context (which talks to MongoDB)
+  const navigate = useNavigate();
   const location = useLocation();
 
-  // Get redirect location from PrivateRoute or default to dashboard
+  // Get redirect location (e.g., from PrivateRoute)
   const { from } = location.state || { from: { pathname: '/dashboard' } };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // Validate form
+
     if (!formData.email || !formData.password) {
       setError('Please fill in all fields');
       return;
@@ -31,14 +32,26 @@ function SignIn() {
     setIsLoading(true);
 
     try {
+      // This `login` comes from AuthContext → calls your MongoDB backend
       await login(formData.email, formData.password);
-      history.replace(from); // Redirect to intended page or dashboard
+
+      // On success, go to intended page
+      navigate(from, { replace: true });
     } catch (err) {
-      setError(
-        err.response?.data?.message || 
-        err.message || 
-        'Failed to sign in. Please check your credentials.'
-      );
+      // Handle error from backend
+      let errorMessage = 'Failed to sign in. Please check your credentials.';
+
+      // Try to get message from server response
+      if (err.message) {
+        errorMessage = err.message;
+      }
+
+      // If server returned JSON error
+      if (err.response?.data?.message) {
+        errorMessage = err.response.data.message;
+      }
+
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -46,39 +59,31 @@ function SignIn() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   return (
-    <div className='signin-container'>
-      <video 
-        src={video} 
-        autoPlay 
-        loop 
-        muted 
-        className='signin-video'
-      >
+    <div className="signin-container">
+      <video src={video} autoPlay loop muted className="signin-video">
         <source src={video} type="video/mp4" />
       </video>
-      
-      <div className='signin-content'>
+
+      <div className="signin-content">
         <h1>WELCOME BACK</h1>
         <p className="signin-subtitle">Sign in to access your predictions</p>
-        
+
         {/* Show redirect message if coming from PrivateRoute */}
         {location.state?.message && (
-          <div className="signin-message">
-            {location.state.message}
-          </div>
+          <div className="signin-message">{location.state.message}</div>
         )}
-        
+
         {error && <div className="signin-error">{error}</div>}
-        
-        <form className='signin-form' onSubmit={handleSubmit}>
-          <div className='form-group'>
+
+        <form className="signin-form" onSubmit={handleSubmit}>
+          <div className="form-group">
             <label htmlFor="email">Email Address</label>
             <input
               type="email"
@@ -87,13 +92,13 @@ function SignIn() {
               value={formData.email}
               onChange={handleChange}
               placeholder="Enter your email"
-              className='form-input'
+              className="form-input"
               required
-              disabled={isLoading || authLoading}
+              disabled={isLoading}
             />
           </div>
-          
-          <div className='form-group'>
+
+          <div className="form-group">
             <label htmlFor="password">Password</label>
             <input
               type="password"
@@ -102,31 +107,30 @@ function SignIn() {
               value={formData.password}
               onChange={handleChange}
               placeholder="Enter your password"
-              className='form-input'
+              className="form-input"
               required
               minLength="6"
-              disabled={isLoading || authLoading}
+              disabled={isLoading}
             />
           </div>
-          
+
           <button
-            type='submit'
-            className={`signin-button ${isLoading || authLoading ? 'loading' : ''}`}
-            disabled={isLoading || authLoading}
+            type="submit"
+            className={`signin-button ${isLoading ? 'loading' : ''}`}
+            disabled={isLoading}
           >
-            {isLoading || authLoading ? (
+            {isLoading ? (
               <>
-                <span className="spinner"></span>
-                SIGNING IN...
+                <span className="spinner"></span> SIGNING IN...
               </>
             ) : (
               'SIGN IN'
             )}
           </button>
-          
-          <div className='signin-links'>
-            <Link to='/forgot-password'>Forgot Password?</Link>
-            <Link to='/sign-up'>Don't have an account? Sign Up</Link>
+
+          <div className="signin-links">
+            <Link to="/forgot-password">Forgot Password?</Link>
+            <Link to="/sign-up">Don't have an account? Sign Up</Link>
           </div>
         </form>
       </div>

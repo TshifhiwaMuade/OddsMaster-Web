@@ -1,6 +1,6 @@
 // src/App.js
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'; // Switch → Routes
 import { AuthProvider } from './contexts/AuthContext';
 import Navbar from './components/Navbar';
 import PrivateRoute from './components/PrivateRoute';
@@ -16,43 +16,27 @@ const Pricing = React.lazy(() => import('./components/pages/Pricing'));
 const Dashboard = React.lazy(() => import('./components/pages/Dashboard'));
 const PageNotFound = React.lazy(() => import('./components/pages/PageNotFound'));
 
-// Create a route configuration object for better maintainability
-const routes = [
-  { path: '/', exact: true, component: Home, isPublic: true },
-  { path: '/services', component: Services, isPublic: true },
-  { path: '/products', component: Products, isPublic: true },
-  { path: '/sign-up', component: SignUp, isPublic: true },
-  { path: '/sign-in', component: SignIn, isPublic: true },
-  { path: '/pricing', exact: true, component: Pricing, isPublic: true },
-  { path: '/dashboard', component: Dashboard, isPublic: false },
-];
-
 function App() {
   return (
     <Router>
       <AuthProvider>
         <Navbar />
         <React.Suspense fallback={<div className="page-loading">Loading...</div>}>
-          <Switch>
-            {routes.map((route) =>
-              route.isPublic ? (
-                <Route
-                  key={route.path}
-                  path={route.path}
-                  exact={route.exact}
-                  component={route.component}
-                />
-              ) : (
-                <PrivateRoute
-                  key={route.path}
-                  path={route.path}
-                  component={route.component}
-                />
-              )
-            )}
-            {/* 404 Page - Keep this last */}
-            <Route component={PageNotFound} />
-          </Switch>
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<Home />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/sign-up" element={<SignUp />} />
+            <Route path="/sign-in" element={<SignIn />} />
+            <Route path="/pricing" element={<Pricing />} />
+
+            {/* Private Routes */}
+            <Route path="/dashboard" element={<PrivateRoute element={<Dashboard />} />} />
+
+            {/* 404 Page - Keep this last with no path */}
+            <Route path="*" element={<PageNotFound />} />
+          </Routes>
         </React.Suspense>
       </AuthProvider>
     </Router>
