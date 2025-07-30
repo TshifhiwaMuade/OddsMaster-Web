@@ -1,8 +1,12 @@
 // src/components/pages/SignUp.js
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { PaystackButton } from 'react-paystack';
 import './SignUp.css';
 import video from '../../media/2938865-uhd_4096_2160_24fps.mp4';
+
+// Paystack amount in kobo (1000 NGN = 100,000 kobo)
+const PAYMENT_AMOUNT = 100000; // ₦1,000
 
 export default function SignUp() {
   const [formData, setFormData] = useState({
@@ -11,14 +15,10 @@ export default function SignUp() {
     password: '',
     allowExtraEmails: false
   });
-  
-  const [errors, setErrors] = useState({
-    name: '',
-    email: '',
-    password: ''
-  });
+  const [errors, setErrors] = useState({ name: '', email: '', password: '' });
   const [loading, setLoading] = useState(false);
   const [serverError, setServerError] = useState('');
+  const [paystackRef, setPaystackRef] = useState(null); // ✅ Store reference
 
   const navigate = useNavigate();
 
@@ -38,15 +38,13 @@ export default function SignUp() {
       newErrors.name = 'Name is required';
       isValid = false;
     }
-
     if (!formData.email) {
       newErrors.email = 'Email is required';
       isValid = false;
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email';
+      newErrors.email = 'Email is invalid';
       isValid = false;
     }
-
     if (!formData.password) {
       newErrors.password = 'Password is required';
       isValid = false;
@@ -59,18 +57,18 @@ export default function SignUp() {
     return isValid;
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    setServerError('');
-    if (!validateInputs()) return;
-
+  const handlePaystackSuccess = async (reference) => {
     setLoading(true);
+    setServerError('');
 
     try {
       const response = await fetch('http://localhost:5000/api/auth/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify({
+          ...formData,
+          paymentReference: reference
+        })
       });
 
       const data = await response.json();
@@ -78,32 +76,65 @@ export default function SignUp() {
       if (response.ok) {
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
-        alert('Sign up successful!');
+        alert('Payment successful! Welcome to Oddsmaster.');
         navigate('/dashboard', { replace: true });
       } else {
-        setServerError(data.message || 'Sign up failed');
+        setServerError(data.message || 'Sign-up failed. Please try again.');
       }
     } catch (err) {
+      console.error('Network error:', err);
       setServerError('Network error. Is the server running?');
     } finally {
       setLoading(false);
+      setPaystackRef(null); // ✅ Reset after success/fail
     }
+  };
+
+  const handlePaystackClose = () => {
+    setServerError('Payment was not completed. Please try again.');
+    setPaystackRef(null); // ✅ Reset if user closes modal
+  };
+
+  // ✅ Generate reference only once per attempt
+  const getPaystackReference = () => {
+    if (!paystackRef) {
+      const newRef = `ref_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      setPaystackRef(newRef);
+      return newRef;
+    }
+    return paystackRef;
+  };
+
+  const paystackComponentProps = {
+    email: formData.email,
+    amount: PAYMENT_AMOUNT,
+    publicKey: process.env.REACT_APP_PAYSTACK_PUBLIC_KEY,
+    text: 'Complete Payment to Activate Account',
+    onSuccess: handlePaystackSuccess,
+    onClose: handlePaystackClose,
+    currency: 'ZAR',
+    reference: getPaystackReference(), // ✅ Stable reference
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!validateInputs()) return;
+    // Paystack modal will open when button is clicked
   };
 
   return (
     <div className="signup-container">
       <video autoPlay loop muted playsInline className="signup-video">
         <source src={video} type="video/mp4" />
-        Your browser does not support HTML5 video.
       </video>
-      
+
       <div className="signup-card">
         <h1 className="signup-title">JOIN THE REVOLUTION</h1>
         <p className="signup-subtitle">Start making smarter bets today</p>
 
         {serverError && <div className="error-message">{serverError}</div>}
-        
-        <form onSubmit={handleSubmit} className="signup-form" noValidate>
+
+        <form onSubmit={handleSubmit} className="signup-form">
           <div className="form-group">
             <input
               type="text"
@@ -115,7 +146,7 @@ export default function SignUp() {
             />
             {errors.name && <span className="error-message">{errors.name}</span>}
           </div>
-          
+
           <div className="form-group">
             <input
               type="email"
@@ -127,7 +158,7 @@ export default function SignUp() {
             />
             {errors.email && <span className="error-message">{errors.email}</span>}
           </div>
-          
+
           <div className="form-group">
             <input
               type="password"
@@ -139,30 +170,39 @@ export default function SignUp() {
             />
             {errors.password && <span className="error-message">{errors.password}</span>}
           </div>
-          
+
           <div className="checkbox-group">
-            <input 
-              type="checkbox" 
+            <input
+              type="checkbox"
               id="allowExtraEmails"
-              name="allowExtraEmails" 
+              name="allowExtraEmails"
               checked={formData.allowExtraEmails}
               onChange={handleChange}
             />
             <label htmlFor="allowExtraEmails">Receive betting insights and updates</label>
           </div>
-          
-          <button type="submit" className="signup-btn" disabled={loading}>
-            {loading ? 'CREATING ACCOUNT...' : 'GET STARTED'}
-          </button>
+
+          <div className="payment-note">
+            <small>
+              You will be charged <strong>₦1,000</strong> to activate your account.
+            </small>
+          </div>
+
+          {/* Paystack Button */}
+          <PaystackButton
+            {...paystackComponentProps}
+            className="signup-btn"
+            disabled={!formData.email || !formData.password || loading}
+          />
+
+          <div className="divider">
+            <span>OR</span>
+          </div>
+
+          <p className="login-link">
+            Already a member? <Link to="/sign-in">Sign In</Link>
+          </p>
         </form>
-        
-        <div className="divider">
-          <span>OR</span>
-        </div>
-        
-        <p className="login-link">
-          Already a member? <Link to="/sign-in">Sign In</Link>
-        </p>
       </div>
     </div>
   );
