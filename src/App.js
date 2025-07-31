@@ -21,7 +21,10 @@ function App() {
     <Router>
       <AuthProvider>
         <Navbar />
-        <React.Suspense fallback={<div className="page-loading">Loading...</div>}>
+        <React.Suspense fallback={<div className="page-loading">
+  <div className="spinner"></div>
+  <p>Loading, getting things ready...</p>
+</div>}>
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<Home />} />

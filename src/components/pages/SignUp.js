@@ -5,8 +5,8 @@ import { PaystackButton } from 'react-paystack';
 import './SignUp.css';
 import video from '../../media/2938865-uhd_4096_2160_24fps.mp4';
 
-// Paystack amount in kobo (1000 NGN = 100,000 kobo)
-const PAYMENT_AMOUNT = 100000; // ₦1,000
+// Paystack amount in cents (R150 = 15000 cents)
+const PAYMENT_AMOUNT = 15000; // R150
 
 export default function SignUp() {
   const [formData, setFormData] = useState({
@@ -18,7 +18,7 @@ export default function SignUp() {
   const [errors, setErrors] = useState({ name: '', email: '', password: '' });
   const [loading, setLoading] = useState(false);
   const [serverError, setServerError] = useState('');
-  const [paystackRef, setPaystackRef] = useState(null); // ✅ Store reference
+  const [paystackRef, setPaystackRef] = useState(null);
 
   const navigate = useNavigate();
 
@@ -57,69 +57,74 @@ export default function SignUp() {
     return isValid;
   };
 
-  const handlePaystackSuccess = async (reference) => {
-    setLoading(true);
-    setServerError('');
+ const handlePaystackSuccess = async (paystackResponse) => {
+  // ✅ Extract ONLY the reference string
+  const reference = paystackResponse.reference || paystackResponse.trxref;
+  
+  if (!reference) {
+    setServerError('Payment reference missing. Please try again.');
+    return;
+  }
 
-    try {
-      const response = await fetch('http://localhost:5000/api/auth/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          paymentReference: reference
-        })
-      });
+  console.log('✅ Extracted Paystack reference:', reference);
+  setLoading(true);
+  setServerError('');
 
-      const data = await response.json();
+  try {
+    const response = await fetch('http://localhost:5000/api/auth/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        ...formData,
+        paymentReference: reference
+      })
+    });
 
-      if (response.ok) {
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
-        alert('Payment successful! Welcome to Oddsmaster.');
-        navigate('/dashboard', { replace: true });
-      } else {
-        setServerError(data.message || 'Sign-up failed. Please try again.');
-      }
-    } catch (err) {
-      console.error('Network error:', err);
-      setServerError('Network error. Is the server running?');
-    } finally {
-      setLoading(false);
-      setPaystackRef(null); // ✅ Reset after success/fail
+    const data = await response.json();
+
+    if (response.ok) {
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      alert('Payment successful! Welcome to Oddsmaster.');
+      navigate('/dashboard', { replace: true });
+    } else {
+      setServerError(data.message || 'Sign-up failed. Please try again.');
     }
-  };
+  } catch (err) {
+    console.error('Network error:', err);
+    setServerError('Network error. Is the server running?');
+  } finally {
+    setLoading(false);
+    setPaystackRef(null);
+  }
+};
 
   const handlePaystackClose = () => {
     setServerError('Payment was not completed. Please try again.');
-    setPaystackRef(null); // ✅ Reset if user closes modal
+    setPaystackRef(null);
   };
-
-  // ✅ Generate reference only once per attempt
-  const getPaystackReference = () => {
-    if (!paystackRef) {
-      const newRef = `ref_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-      setPaystackRef(newRef);
-      return newRef;
-    }
-    return paystackRef;
-  };
-
-  const paystackComponentProps = {
-    email: formData.email,
-    amount: PAYMENT_AMOUNT,
-    publicKey: process.env.REACT_APP_PAYSTACK_PUBLIC_KEY,
-    text: 'Complete Payment to Activate Account',
-    onSuccess: handlePaystackSuccess,
-    onClose: handlePaystackClose,
-    currency: 'ZAR',
-    reference: getPaystackReference(), // ✅ Stable reference
-  };
+const getPaystackReference = () => {
+  if (!paystackRef) {
+    const newRef = `ref_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    setPaystackRef(newRef);
+    return newRef;
+  }
+  return paystackRef;
+};
+const paystackComponentProps = {
+  email: formData.email,
+  amount: PAYMENT_AMOUNT,
+  publicKey: process.env.REACT_APP_PAYSTACK_PUBLIC_KEY,
+  text: 'Complete Payment to Activate Account',
+  onSuccess: handlePaystackSuccess,
+  onClose: handlePaystackClose,
+  currency: 'ZAR', 
+  reference: getPaystackReference(),
+};
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!validateInputs()) return;
-    // Paystack modal will open when button is clicked
   };
 
   return (
@@ -184,16 +189,19 @@ export default function SignUp() {
 
           <div className="payment-note">
             <small>
-              You will be charged <strong>₦1,000</strong> to activate your account.
+              You will be charged <strong>R150</strong> to activate your account.
             </small>
           </div>
 
-          {/* Paystack Button */}
-          <PaystackButton
-            {...paystackComponentProps}
-            className="signup-btn"
-            disabled={!formData.email || !formData.password || loading}
-          />
+          {process.env.REACT_APP_PAYSTACK_PUBLIC_KEY ? (
+            <PaystackButton
+              {...paystackComponentProps}
+              className="signup-btn"
+              disabled={!formData.email || !formData.password || loading}
+            />
+          ) : (
+            <p className="error-message">Payment system not ready. Check configuration.</p>
+          )}
 
           <div className="divider">
             <span>OR</span>
