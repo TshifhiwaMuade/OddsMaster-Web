@@ -1,15 +1,16 @@
+// src/components/Dashboard/BettingCard.js
 import React from 'react';
 import ProbabilityItem from './ProbabilityItem';
 import MatchResults from './MatchResults';
+import './dashboard-styles.css';
 
-// Named export (can import as { BettingCard })
 export const BettingCard = () => {
   const probabilityData = [
-    { probability: '0.1%', description: 'A person may not work', value: 52 },
-    { probability: '0.2%', description: 'A person may not work', value: 10 },
-    { probability: '0.3%', description: 'A person may not work', value: 10 },
-    { probability: '0.4%', description: 'A person may not work', value: 20 },
-    { probability: '0.5%', description: 'A person may not work', value: 20 },
+    { probability: '0.1%', description: 'Low Risk - No Work', value: 52 },
+    { probability: '0.2%', description: 'Medium Risk - Low Output', value: 10 },
+    { probability: '0.3%', description: 'Medium Risk - Low Output', value: 10 },
+    { probability: '0.4%', description: 'High Risk - Delayed Work', value: 20 },
+    { probability: '0.5%', description: 'High Risk - Delayed Work', value: 20 },
   ];
 
   return (
@@ -19,19 +20,18 @@ export const BettingCard = () => {
         <p className="powered-by">POWERED BY AI</p>
         <p className="subtext">Human welfare subject to mild state discrimination</p>
       </div>
-      
+
       <div className="probability-list">
         {probabilityData.map((item, index) => (
           <ProbabilityItem key={index} {...item} />
         ))}
       </div>
-      
+
       <div className="divider"></div>
-      
+
       <MatchResults />
     </div>
   );
 };
 
-// Default export (can import as BettingCard)
 export default BettingCard;

@@ -20,7 +20,7 @@ app.use(cors({
   credentials: true
 }));
 
-// === MongoDB Connection (No deprecated options) ===
+// === MongoDB Connection ===
 mongoose.connect(process.env.MONGO_URI);
 
 const db = mongoose.connection;
@@ -46,27 +46,29 @@ const userSchema = new mongoose.Schema({
 const User = mongoose.model('User', userSchema);
 const saltRounds = 10;
 
-// === Paystack Verification (Added User-Agent to bypass Cloudflare) ===
+// === Paystack Verification: FIXED URL (No Extra Spaces!) ===
 const verifyPayment = async (reference) => {
   try {
-    console.log('Verifying Paystack payment with reference:', reference);
-    const response = await axios.get(
-      `https://api.paystack.co/transaction/verify/${reference}`,
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
-          'User-Agent': 'Oddsmaster-Payment-System/1.0'
-        },
-        timeout: 10000
-      }
-    );
-    console.log('Paystack verification response:', response.data);
+    // ✅ Critical Fix: Removed extra spaces in URL
+    const url = `https://api.paystack.co/transaction/verify/${reference.trim()}`;
+    console.log('Verifying Paystack payment:', url);
+
+    const response = await axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
+        'User-Agent': 'Oddsmaster-Payment-System/1.0'
+      },
+      timeout: 10000
+    });
+
+    console.log('✅ Paystack verification successful:', response.data.data.status);
     return response.data;
   } catch (error) {
-    console.error('Paystack verification error:', {
+    console.error('🚨 Paystack verification failed:', {
       status: error.response?.status,
       data: error.response?.data,
-      message: error.message
+      message: error.message,
+      url: error.config?.url
     });
     return null;
   }
@@ -88,16 +90,22 @@ app.post('/api/auth/signup', async (req, res) => {
 
     const verification = await verifyPayment(paymentReference);
     if (!verification) {
-      return res.status(400).json({ message: 'Payment verification failed: Could not connect to Paystack.' });
+      return res.status(400).json({ 
+        message: 'Payment verification failed: Could not connect to Paystack.' 
+      });
     }
 
     if (verification.data.status !== 'success') {
-      return res.status(400).json({ message: 'Payment was not successful. Please try again.' });
+      return res.status(400).json({ 
+        message: 'Payment was not successful. Please try again.' 
+      });
     }
 
     const { authorization } = verification.data;
     if (!authorization || !authorization.authorization_code) {
-      return res.status(400).json({ message: 'Invalid authorization data from Paystack.' });
+      return res.status(400).json({ 
+        message: 'Invalid authorization data from Paystack.' 
+      });
     }
 
     const hashedPassword = await bcrypt.hash(password, saltRounds);
@@ -166,13 +174,23 @@ app.post('/api/auth/login', async (req, res) => {
   }
 });
 
-// Health Check
+// === Football API Routes ===
+try {
+  const fixtureRoutes = require('./routes/fixtures');
+  app.use('/api', fixtureRoutes);
+} catch (error) {
+  console.error('❌ Failed to load fixtures route:', error.message);
+}
+
+// === Health Check ===
 app.get('/', (req, res) => {
   res.json({ message: 'OddsMaster API is running' });
 });
 
+// === Start Server ===
 app.listen(PORT, () => {
   console.log(`✅ Server running on http://localhost:${PORT}`);
   console.log(`🔗 Frontend: ${process.env.FRONTEND_URL || 'http://localhost:3000'}`);
   console.log(`🔐 JWT: ${process.env.JWT_SECRET ? 'Enabled' : '🚨 MISSING!'}`);
+  console.log(`⚽ Football API Key: ${process.env.FOOTBALL_API_KEY ? 'Loaded' : 'Not found'}`);
 });

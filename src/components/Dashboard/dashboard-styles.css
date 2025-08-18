@@ -1,65 +1,98 @@
-/* === Dashboard Styles === */
+/* src/components/Dashboard/dashboard-styles.css */
+
+/* === Global Dashboard Variables === */
+:root {
+  --primary-color: #00d4ff;
+  --secondary-color: #6e48aa;
+  --dark-color: #2c3e50;
+  --light-bg: #f5f7fa;
+  --card-bg: rgba(15, 20, 30, 0.85);
+  --border-color: rgba(255, 255, 255, 0.1);
+  --text-muted: #7f8c8d;
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--light-bg);
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+/* === Dashboard Page Layout === */
 .dashboard-page {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
   gap: 20px;
   padding: 20px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f5f7fa;
   min-height: 100vh;
-  color: #333;
+  background-color: var(--light-bg);
+}
+
+/* Make it responsive */
+@media (max-width: 768px) {
+  .dashboard-page {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto auto;
+    gap: 16px;
+  }
 }
 
 /* === Card Base Styles === */
 .card {
-  background-color: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  background-color: var(--card-bg);
+  border-radius: 16px;
   padding: 24px;
-  flex: 1;
   min-width: 300px;
-  border: 1px solid #e9ecef;
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  color: white;
 }
 
 .card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  box-shadow: var(--shadow-lg);
 }
 
-.betting-card {
-  max-width: 400px;
-}
-
-.material-card {
-  max-width: 600px;
+/* Ensure cards take full width */
+.card {
+  flex: 1;
 }
 
 /* === Card Header === */
 .card-header {
   margin-bottom: 20px;
   padding-bottom: 12px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .card-header h1 {
   margin: 0;
   font-size: 1.5rem;
   font-weight: 600;
-  color: #2c3e50;
+  color: var(--dark-color);
   line-height: 1.3;
 }
 
 .powered-by {
   font-size: 0.85rem;
-  color: #007bff;
+  color: var(--primary-color);
   margin: 6px 0;
   font-weight: 500;
 }
 
 .subtext {
   font-size: 0.8rem;
-  color: #7f8c8d;
+  color: var(--text-muted);
   margin: 4px 0 0;
   font-style: italic;
 }
@@ -74,19 +107,19 @@
   align-items: center;
   margin-bottom: 10px;
   padding: 10px;
-  background-color: #f8f9fa;
-  border-left: 4px solid #007bff;
+  background-color: rgba(248, 249, 250, 0.7);
+  border-left: 4px solid var(--primary-color);
   border-radius: 6px;
   transition: background-color 0.2s ease;
 }
 
 .probability-item:hover {
-  background-color: #e9f5ff;
+  background-color: rgba(233, 245, 255, 0.8);
 }
 
 .probability-value {
   font-weight: 600;
-  color: #e74c3c;
+  color: var(--primary-color);
   min-width: 50px;
   font-size: 0.9rem;
 }
@@ -107,14 +140,14 @@
 
 .probability-number {
   font-weight: 600;
-  color: #27ae60;
+  color: var(--secondary-color);
   font-size: 0.9rem;
 }
 
 /* === Divider === */
 .divider {
   height: 1px;
-  background-color: #eee;
+  background-color: var(--border-color);
   margin: 24px 0;
 }
 
@@ -126,13 +159,13 @@
 .goals-section h3 {
   margin: 0 0 8px 0;
   font-size: 1rem;
-  color: #2c3e50;
+  color: var(--dark-color);
   font-weight: 500;
 }
 
 .company-name {
   font-size: 0.8rem;
-  color: #6c757d;
+  color: var(--text-muted);
   margin: 0;
   font-style: normal;
 }
@@ -168,7 +201,7 @@
 
 .match-results li strong,
 .rank-board li strong {
-  color: #007bff;
+  color: var(--primary-color);
 }
 
 /* === Material Tables === */
@@ -178,7 +211,7 @@
   border-collapse: collapse;
   margin: 16px 0;
   font-size: 0.9rem;
-  border: 1px solid #dee2e6;
+  border: 1px solid var(--border-color);
 }
 
 .material-table th,
@@ -186,15 +219,15 @@
   text-align: left;
   padding: 10px 12px;
   background-color: #f1f3f5;
-  border-bottom: 1px solid #dee2e6;
+  border-bottom: 1px solid var(--border-color);
   font-weight: 600;
-  color: #2c3e50;
+  color: var(--dark-color);
 }
 
 .material-table td,
 .details-table td {
   padding: 10px 12px;
-  border-bottom: 1px solid #e9ecef;
+  border-bottom: 1px solid var(--border-color);
   color: #495057;
 }
 
@@ -216,14 +249,14 @@
 .molecule-sales h3 {
   margin: 0 0 8px 0;
   font-size: 1rem;
-  color: #2c3e50;
+  color: var(--dark-color);
   font-weight: 500;
 }
 
 .molecule-sales h4 {
   margin: 8px 0;
   font-size: 0.9rem;
-  color: #6c757d;
+  color: var(--text-muted);
   font-weight: 400;
 }
 
@@ -243,15 +276,15 @@
 .new-material {
   margin-top: 16px;
   padding: 12px;
-  background-color: #f8f9fa;
+  background-color: rgba(248, 249, 250, 0.7);
   border-radius: 6px;
-  border-left: 4px solid #6c757d;
+  border-left: 4px solid var(--text-muted);
 }
 
 .new-material h4 {
   margin: 0;
   font-size: 0.9rem;
-  color: #6c757d;
+  color: var(--text-muted);
   font-weight: 500;
 }
 
@@ -261,25 +294,30 @@
   color: #555;
 }
 
-/* === Responsive Adjustments === */
-@media (max-width: 768px) {
-  .dashboard-page {
-    flex-direction: column;
-    gap: 16px;
-  }
+/* FCTables Containers */
+.fctables-embed-container,
+.fctables-iframe-container {
+  width: 100%;
+  height: 500px;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #0c0d13;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
 
-  .card {
-    min-width: auto;
-    padding: 16px;
-  }
+.fctables-embed-container iframe,
+.fctables-iframe-container iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 12px;
+}
 
-  .card-header h1 {
-    font-size: 1.3rem;
-  }
-
-  .probability-item,
-  .match-results ul,
-  .rank-board ul {
-    font-size: 0.85rem;
+/* Responsive */
+@media (max-width: 600px) {
+  .fctables-embed-container,
+  .fctables-iframe-container {
+    height: 400px;
   }
 }
